@@ -1,3 +1,0 @@
-/home/ling/uni/ws19/DBV/U01/build/CMakeFiles/rebuild_cache.dir
-/home/ling/uni/ws19/DBV/U01/build/CMakeFiles/edit_cache.dir
-/home/ling/uni/ws19/DBV/U01/build/CMakeFiles/ue1.dir
