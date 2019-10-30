@@ -117,53 +117,54 @@ void m_medianBlur(Mat & srcImg, Mat & dstImg, int filterSize)
     } 
 }
 
-void yu_medianBlur(Mat & srcImg, int rowX, int colY, int fensterSize)
-{
-    if (fensterSize == 0 || fensterSize % 2 == 0)
-    {
-        cout << "Error: the given number of fensterSize has to be postive odd!";
-        return;
-    }
-    int fensterRowMiddel = rowX + fensterSize/2;
-    int fensterColMiddel = colY + fensterSize/2;
-    int numHalf = (fensterSize^2) / 2;
+// void yu_medianBlur(Mat & srcImg, int rowX, int colY, int fensterSize)
+// {
+//     if (fensterSize == 0 || fensterSize % 2 == 0)
+//     {
+//         cout << "Error: the given number of fensterSize has to be postive odd!";
+//         return;
+//     }
+//     int fensterRowMiddel = rowX + fensterSize/2;
+//     int fensterColMiddel = colY + fensterSize/2;
+//     int numHalf = (fensterSize * fensterSize) / 2;
 
-    vector<uchar> vecPixel;
+//     vector<uchar> vecPixel;
 
 
-    for (int i = rowX; i < rowX + fensterSize; i++)
-    {
-        Vec3b *p = srcImg.ptr<Vec3b>(i);
+//     for (int i = rowX; i < rowX + fensterSize; i++)
+//     {
+//         Vec3b *p;
+//         p = srcImg.ptr<Vec3b>(i);
         
-        for (int j = colY; j < colY + fensterSize; j++)
-        {
-            (* vecPixel).push_back(& p(i)[j]);
-        }
-    }
-    sort(vecPixel.begin(),vecPixel.begin()+numHalf,vecPixel.end());
-    srcImg.at<Vec3b>(fensterRowMiddel,fensterColMiddel) = vecPixel[numHalf];
+//         for (int j = colY; j < colY + fensterSize; j++)
+//         {
+//             // (vecPixel).push_back(& p(i)[j]);
+//         }
+//     }
+//     sort(vecPixel.begin(),vecPixel.begin()+numHalf,vecPixel.end());
+//     srcImg.at<Vec3b>(fensterRowMiddel,fensterColMiddel) = vecPixel[numHalf];
 
-}
+// }
 
-void yu_applymedianBlur(Mat & srcImg, Mat & dstImg, int fensterSize)
-{
-    int rowI = srcImg.rows;
-    int colJ = srcImg.cols * srcImg.channels();
+// void yu_applymedianBlur(Mat & srcImg, Mat & dstImg, int fensterSize)
+// {
+//     int rowI = srcImg.rows;
+//     int colJ = srcImg.cols * srcImg.channels();
 
-    if (srcImg.isContinuous())
-    {
-        colJ = rowI * colJ;
-        rowI = 1;
-    }
+//     if (srcImg.isContinuous())
+//     {
+//         colJ = rowI * colJ;
+//         rowI = 1;
+//     }
 
-    for (int i = 0; i < rowI; i++)
-    { 
-        for (int j = 0; j < colJ; j++)
-        {
-            yu_medianBlur(srcImg, i, j, fensterSize);
-        }
-    }
-}
+//     for (int i = 0; i < rowI; i++)
+//     { 
+//         for (int j = 0; j < colJ; j++)
+//         {
+//             yu_medianBlur(srcImg, i, j, fensterSize);
+//         }
+//     }
+// }
 
 int main()
 {
