@@ -57,7 +57,7 @@ void pic_filter(Mat & image)
 
     //imwrite("grayscale.jpg", gray);
     imshow("grayscale", gray);
-
+	
     Mat normal_blur_pic;
     blur(image,normal_blur_pic,Size(5,5),Point(-1,-1));
     imshow("Normalized Block Filter:", normal_blur_pic);
@@ -91,17 +91,19 @@ void applyMedianFilter(Mat & srcImg, int rowCord, int colCord, int filterSize)
             //if (srcImg.channels() == 1)
                 vecPixel.push_back(srcImg.at<uchar>(i,j));
 
-            // else if (srcImg.channels() == 3){
-            //     srcImg.at<cv::Vec3b>(j,i)[0] = 0;
-            //     srcImg.at<cv::Vec3b>(j,i)[1] = 0;
-            //     srcImg.at<cv::Vec3b>(j,i)[2] = 0;
-            // }
         }
     }
 
     sort(vecPixel.begin(), vecPixel.end());
     int medianIndex = filterSize * filterSize / 2;
     srcImg.at<uchar>(rowCord, colCord) = vecPixel[medianIndex];
+
+	// visualization
+	/*Point upperLeft = Point(colCord - cordOffset, rowCord - cordOffset);
+	Point lowerRight = Point(colCord + cordOffset, rowCord + cordOffset);
+	Mat winImg = srcImg.clone();
+	rectangle(winImg, upperLeft, lowerRight, Scalar(255, 0, 0));
+	imwrite(".\\output\\window" + to_string(rowCord) + "_" + to_string(colCord) + ".png", winImg);*/
 }
 
 void m_medianBlur(Mat & srcImg, Mat & dstImg, int filterSize)
@@ -112,59 +114,10 @@ void m_medianBlur(Mat & srcImg, Mat & dstImg, int filterSize)
     {
         for (int j = offset; j < srcImg.cols - offset; j++)
         {
-            applyMedianFilter(srcImg, i, j, filterSize);
+			applyMedianFilter(srcImg, i, j, filterSize);
         }
     } 
 }
-
-// void yu_medianBlur(Mat & srcImg, int rowX, int colY, int fensterSize)
-// {
-//     if (fensterSize == 0 || fensterSize % 2 == 0)
-//     {
-//         cout << "Error: the given number of fensterSize has to be postive odd!";
-//         return;
-//     }
-//     int fensterRowMiddel = rowX + fensterSize/2;
-//     int fensterColMiddel = colY + fensterSize/2;
-//     int numHalf = (fensterSize * fensterSize) / 2;
-
-//     vector<uchar> vecPixel;
-
-
-//     for (int i = rowX; i < rowX + fensterSize; i++)
-//     {
-//         Vec3b *p;
-//         p = srcImg.ptr<Vec3b>(i);
-        
-//         for (int j = colY; j < colY + fensterSize; j++)
-//         {
-//             // (vecPixel).push_back(& p(i)[j]);
-//         }
-//     }
-//     sort(vecPixel.begin(),vecPixel.begin()+numHalf,vecPixel.end());
-//     srcImg.at<Vec3b>(fensterRowMiddel,fensterColMiddel) = vecPixel[numHalf];
-
-// }
-
-// void yu_applymedianBlur(Mat & srcImg, Mat & dstImg, int fensterSize)
-// {
-//     int rowI = srcImg.rows;
-//     int colJ = srcImg.cols * srcImg.channels();
-
-//     if (srcImg.isContinuous())
-//     {
-//         colJ = rowI * colJ;
-//         rowI = 1;
-//     }
-
-//     for (int i = 0; i < rowI; i++)
-//     { 
-//         for (int j = 0; j < colJ; j++)
-//         {
-//             yu_medianBlur(srcImg, i, j, fensterSize);
-//         }
-//     }
-// }
 
 int main()
 {
@@ -180,24 +133,28 @@ int main()
     cvtColor(src_pic, grayImg, CV_BGR2GRAY); 
     imshow("salted_picture", src_pic);
 
-    double t1 = (double)getTickCount();
-    //certain event
-    Mat medianBlurimg;
-    medianBlur(grayImg, medianBlurimg,3);
-    t1 = ((double)getTickCount() - t1)/ getTickFrequency(); //number of ticks/ times that CPU emits a tick in 1s
-    cout << "openCV median: Times passt in seconds:" << t1 << endl;
+    //double t1 = (double)getTickCount();
+    ////certain event
+    //Mat medianBlurimg;
+    //medianBlur(grayImg, medianBlurimg,3);
+    //t1 = ((double)getTickCount() - t1)/ getTickFrequency(); //number of ticks/ times that CPU emits a tick in 1s
+    //cout << "openCV median: Times passt in seconds:" << t1 << endl;
 
     double t = (double)getTickCount();
     //certain event
     Mat medianDst;
-    m_medianBlur(grayImg, medianDst, 3);
+	resize(grayImg, grayImg, Size(grayImg.cols * 0.3, grayImg.rows * 0.3));
+    m_medianBlur(grayImg, medianDst, 25);
     t = ((double)getTickCount() - t)/ getTickFrequency(); //number of ticks/ times that CPU emits a tick in 1s
     cout << "my median: Times passt in seconds:" << t << endl;
+	/*Point upperLeft = Point(0, 0);
+	Point lowerRight = Point(30, 30);
+	rectangle(grayImg, upperLeft, lowerRight, Scalar(255, 0, 0));*/
     imshow("median", grayImg);
     //imshow("median", medianDst);
 
 
-    // imwrite("fil_pic.jpg",gaus_blur_pic);
+     //imwrite(".\\output\\fil_pic.jpg", grayImg);
     // imshow("Gaussian Filter:", gaus_blur_pic);
 
     while(1){
